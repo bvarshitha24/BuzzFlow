@@ -1,6 +1,7 @@
 
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class Invoice extends BaseEntity {
         this.invoiceNumber = invoiceNumber;
     }
 
+    @JsonIgnore
     public Customer getCustomer() {
         return customer;
     }
@@ -102,8 +104,7 @@ public class Invoice extends BaseEntity {
         BigDecimal paid = paidAmount == null
                 ? BigDecimal.ZERO : paidAmount;
 
-        BigDecimal outstanding = totalAmount.subtract(paid);
-
-        return outstanding.max(BigDecimal.ZERO);
+        return totalAmount.subtract(paid)
+                .max(BigDecimal.ZERO);
     }
 }
